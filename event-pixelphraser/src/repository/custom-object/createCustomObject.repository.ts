@@ -5,7 +5,7 @@ export async function createProductCustomObject(productId: string, imageUrl: str
     try {
         const apiRoot = createApiRoot();
 
-        logger.info(`✅ Creating custom object for product ID: ${productId}`);
+        logger.info(`⌛Creating custom object for product ID: ${productId}`);
         
         const customObject = await apiRoot.customObjects().post({
             body: {

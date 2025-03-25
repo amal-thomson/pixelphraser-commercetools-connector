@@ -51,6 +51,7 @@ import { model } from '../../config/ai.config';
 
 export async function generateProductDescription(imageData: ImageData, productName: string, productTypeKey: string): Promise<string> {
     try {
+        logger.info('⌛Sending image data to Generative AI for generating descriptions.');
         let prompt = '';
 
         switch (productTypeKey) {

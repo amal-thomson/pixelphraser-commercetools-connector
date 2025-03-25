@@ -3,6 +3,7 @@ import { model } from '../../config/ai.config';
 
 export async function translateProductDescription(generatedDescription: string): Promise<Record<string, string>> {
     try {
+        logger.info('⌛Sending generatedDescription to Generative AI for translation.');
         const translations: Record<string, string> = {};
         const locales = ['en-GB', 'en-US', 'de-DE'];
 

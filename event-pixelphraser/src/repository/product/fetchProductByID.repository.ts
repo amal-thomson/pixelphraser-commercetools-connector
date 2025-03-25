@@ -6,7 +6,7 @@ export async function fetchProduct(productId: string): Promise<Product> {
     try {
         const apiRoot = createApiRoot();
 
-        logger.info('⌛Fetching product data for product ID: ' + productId);
+        logger.info(`🔎 Fetching product data for Product ID: ${productId}`);
         
         const productResponse = await apiRoot
             .products()

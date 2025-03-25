@@ -13,6 +13,7 @@ export async function updateCustomObjectWithDescription(
     productType: string
 ) {
     try {
+        logger.info('⌛Updating custom object with generated description.');
         const apiRoot = createApiRoot();
 
         logger.info(`✅ Fetching custom object for product ID: ${productId} to get current version.`);
