@@ -121,7 +121,6 @@ export const post = async (request: Request, response: Response): Promise<void> 
         }, productTypeKey);
 
         logger.info('✅Processing completed successfully. ');
-        logger.info('⌛Event application listening for event message.');
 
         // return;
 
