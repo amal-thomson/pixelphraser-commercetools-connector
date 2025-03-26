@@ -13,27 +13,37 @@ export const post = async (request: Request, response: Response): Promise<void> 
     try {
         // Extract and validate Pub/Sub message
         const pubSubMessage = request.body?.message;
-        logger.info('Message Received:', pubSubMessage);
         if (!pubSubMessage) {
             logger.error('Missing Pub/Sub message.');
             response.status(400).send();
             return;
         }
+        logger.info('Message Received:', pubSubMessage);
 
         // Decode Pub/Sub message data
         const decodedData = pubSubMessage.data
             ? Buffer.from(pubSubMessage.data, 'base64').toString().trim()
             : undefined;
 
-        logger.info('Decoded Data:', decodedData);
         if (!decodedData) {
             logger.error('No data found in Pub/Sub message.');
             response.status(400).send();
             return;
         }
+        logger.info('Decoded Data:', decodedData);
 
-        // Validate event type
+        // Parse the decoded data
         const messageData = JSON.parse(decodedData);
+
+        // Check if the notification type is ResourceCreated
+        const notificationType = messageData?.notificationType;
+        if (notificationType !== 'ResourceCreated') {
+            logger.info('Resource created notification received. Skipping the message.');
+            response.status(200).send();
+            return;
+        }
+
+        // Check if the resource type is ProductVariantAdded
         const eventType = messageData?.type;
         logger.info(`Event received: ${eventType}`);
         if (eventType !== 'ProductVariantAdded') {
