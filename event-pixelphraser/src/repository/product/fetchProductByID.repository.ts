@@ -6,7 +6,7 @@ export async function fetchProduct(productId: string): Promise<Product> {
     try {
         const apiRoot = createApiRoot();
 
-        logger.info(`🔎 Fetching product data for Product ID: ${productId}`);
+        logger.info(`Fetching product data for Product ID: ${productId}`);
         
         const productResponse = await apiRoot
             .products()
@@ -16,12 +16,13 @@ export async function fetchProduct(productId: string): Promise<Product> {
 
         const productData = productResponse.body ?? null;
 
-        logger.info(`✅Product fetched successfully: ${productData}`);
+        logger.info(`Product data fetched successfully for Product ID: ${productId}`);
+        // logger.debug(`Product data: ${JSON.stringify(productData)}`);
 
         return productData;
 
     } catch (error: any) {
-        logger.error(`🚫Failed to fetch product for ID: ${productId}`, {
+        logger.error(`Failed to fetch product data for Product ID: ${productId}`, {
             message: error.message,
         });
         throw error;

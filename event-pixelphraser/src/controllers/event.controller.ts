@@ -120,12 +120,10 @@ export const post = async (request: Request, response: Response): Promise<void> 
             'de-DE': string;
         }, productTypeKey);
 
-        logger.info('✅Processing completed successfully. ');
-
-        // return;
+        logger.info('Processing completed successfully. ');
 
     } catch (error) {
-        logger.error('🚫Error processing request', { error: error instanceof Error ? error.message : error });
+        logger.error('Error processing request', { error: error instanceof Error ? error.message : error });
         response.status(500).send();
     }
 };

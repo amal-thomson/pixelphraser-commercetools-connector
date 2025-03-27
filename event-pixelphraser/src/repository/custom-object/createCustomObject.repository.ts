@@ -5,7 +5,7 @@ export async function createProductCustomObject(productId: string, imageUrl: str
     try {
         const apiRoot = createApiRoot();
 
-        logger.info(`⌛Creating custom object for product ID: ${productId}`);
+        logger.info(`Creating custom object for product ID: ${productId}`);
         
         const customObject = await apiRoot.customObjects().post({
             body: {
@@ -22,11 +22,11 @@ export async function createProductCustomObject(productId: string, imageUrl: str
             }
         }).execute();
 
-        logger.info(`✅ Custom object created successfully for product ID: ${productId}.`);
+        logger.info(`Custom object created successfully for product ID: ${productId}.`);
         return customObject;
 
     } catch (error: any) {
-        logger.error(`❌ Failed to create custom object for product ID: ${productId}`, { message: error.message });
+        logger.error(`Failed to create custom object for product ID: ${productId}`, { message: error.message });
         throw error;
     }
 }

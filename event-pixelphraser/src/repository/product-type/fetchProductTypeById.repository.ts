@@ -5,7 +5,7 @@ export async function fetchProductType(productType: string): Promise<string | nu
     try {
         const apiRoot = createApiRoot();
 
-        logger.info('⌛Fetching product type key for product type ID: ' + productType);
+        logger.info('Fetching product type key for product type ID: ' + productType);
 
         const productTypeResponse = await apiRoot
             .productTypes()
@@ -15,12 +15,12 @@ export async function fetchProductType(productType: string): Promise<string | nu
 
         const productTypeKey = productTypeResponse.body.key ?? null;
 
-        logger.info(`✅Product type fetched successfully: ${productTypeKey}`);
+        logger.info(`Product type fetched successfully, Product Type Key: ${productTypeKey}`);
 
         return productTypeKey;
         
     } catch (error: any) {
-        logger.error(`🚫Failed to fetch product type for ID: ${productType}`, {
+        logger.error(`Failed to fetch product type for Product ID: ${productType}`, {
             message: error.message,
         });
         return null;
