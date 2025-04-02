@@ -5,7 +5,7 @@ import { fetchTemporaryDescriptions } from '../../hooks/fetchTemporaryDescriptio
 import { Header } from './header';
 import { DescriptionsTable } from './descriptionTable';
 import { SearchBar } from './searchBar';
-import { StatusMessage } from './statusMessage';
+import { StatusMessage } from '../common/statusMessage';
 import { ImageModal } from './imageModal';
 import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 import Card from '@commercetools-uikit/card';
