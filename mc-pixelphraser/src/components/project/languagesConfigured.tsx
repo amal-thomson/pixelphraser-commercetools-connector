@@ -42,10 +42,10 @@ const LanguagesConfigured = ({ languages = [] }: LocalesConfiguredProps) => {
       setLoading(true);
       try {
         const response = await fetchSelectedLanguages(dispatch);
-        console.log('Fetched Selected Languages Response:', response);
-
+        console.log('Response Value:', response.value);
         if (response?.value) {
           if (Array.isArray(response.value)) {
+            console.log('Fetched Selected Languages:', response.value);
             setSavedLanguages(response.value);
           } else {
             console.warn('Unexpected data format for selected languages:', response.value);
