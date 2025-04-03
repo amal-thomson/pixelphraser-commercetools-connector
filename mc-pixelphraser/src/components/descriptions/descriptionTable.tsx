@@ -29,9 +29,9 @@ export const DescriptionsTable = ({
       await updateProductDescription(
         dispatch,
         tempDesc.key,
-        tempDesc.value.usDescription || '',
-        tempDesc.value.gbDescription || '',
-        tempDesc.value.deDescription || ''
+        tempDesc.value["en-US"] || '',
+        tempDesc.value["en-GB"] || '',
+        tempDesc.value["de-DE"] || ''
       );
       await deleteTemporaryDescription(dispatch, tempDesc.id, tempDesc.version);
       await loadDescriptions();
@@ -103,10 +103,10 @@ export const DescriptionsTable = ({
           <div
             onClick={() => {
               const desc = {
-                US: item.usDescription || 'N/A',
-                GB: item.gbDescription || 'N/A',
-                DE: item.deDescription || 'N/A'
-              };
+                US: item["en-US"] || 'N/A',
+                GB: item["en-GB"] || 'N/A',
+                DE: item["de-DE"] || 'N/A'
+            };            
               setExpandedDesc(JSON.stringify(desc));
             }}
             style={{
@@ -118,9 +118,9 @@ export const DescriptionsTable = ({
             }}
           >
             <Text.Body>
-              <strong>US:</strong> {getShortDescription(item.usDescription)} <br />
-              <strong>GB:</strong> {getShortDescription(item.gbDescription)} <br />
-              <strong>DE:</strong> {getShortDescription(item.deDescription)}
+            <strong>US:</strong> {getShortDescription(item["en-US"])} <br />
+            <strong>GB:</strong> {getShortDescription(item["en-GB"])} <br />
+            <strong>DE:</strong> {getShortDescription(item["de-DE"])}
               <div style={{ marginTop: '0.5rem', color: '#0066cc', fontSize: '0.8rem' }}>
                 Click to view full descriptions
               </div>
@@ -157,9 +157,9 @@ export const DescriptionsTable = ({
           imageUrl: desc.value.imageUrl,
           productName: desc.value.productName,
           descriptions: 'descriptions',
-          usDescription: desc.value.usDescription,
-          gbDescription: desc.value.gbDescription,
-          deDescription: desc.value.deDescription,
+          ["en-US"]: desc.value["en-US"],
+          ["en-GB"]: desc.value["en-GB"],
+          ["de-DE"]: desc.value["de-DE"],
           // generatedAt: desc.value.generatedAt,
           actions: 'actions',
           id: desc.id

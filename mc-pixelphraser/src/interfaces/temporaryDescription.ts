@@ -3,9 +3,9 @@ export interface TemporaryDescription {
   version: number;
   key: string;
   value: {
-    usDescription?: string | null;
-    gbDescription?: string | null;
-    deDescription?: string | null;
+    ["en-US"]?: string | null;
+    ["en-GB"]?: string | null;
+    ["de-DE"]?: string | null;
     imageUrl: string;
     productType: string;
     productName: string;

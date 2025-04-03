@@ -1,23 +1,32 @@
 import { createApiRoot } from '../../client/create.client';
 import { logger } from '../../utils/logger.utils';
 
-export async function createProductCustomObject(productId: string, imageUrl: string, productName: string, productType: string) {
+export async function createProductCustomObject(
+    productId: string, 
+    imageUrl: string, 
+    productName: string, 
+    productType: string, 
+    languagesForTranslation: string[]
+) {
     try {
         const apiRoot = createApiRoot();
 
         logger.info(`Creating custom object for product ID: ${productId}`);
-        
+
+        const descriptions = languagesForTranslation.reduce((acc, lang) => {
+            acc[lang] = null; 
+            return acc;
+        }, {} as Record<string, string | null>);
+
         const customObject = await apiRoot.customObjects().post({
             body: {
                 container: "temporaryDescription",
                 key: productId,
                 value: {
-                    usDescription: null,
-                    gbDescription: null,
-                    deDescription: null,
-                    imageUrl: imageUrl,
+                    ...descriptions,
+                    imageUrl,
                     productType,
-                    productName: productName
+                    productName
                 }
             }
         }).execute();

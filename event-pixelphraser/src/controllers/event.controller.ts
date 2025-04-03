@@ -8,6 +8,8 @@ import { updateCustomObjectWithDescription } from '../repository/custom-object/u
 import { fetchProductType } from '../repository/product-type/fetchProductTypeById.repository';
 import { translateProductDescription } from '../services/generative-ai/translateProductDescription.service';
 import { fetchProduct } from '../repository/product/fetchProductByID.repository';
+import { fetchselectedLanguages } from '../repository/custom-object/fetchSelectedLanguages';
+import { log } from 'console';
 
 export const post = async (request: Request, response: Response): Promise<void> => {
     try {
@@ -36,12 +38,12 @@ export const post = async (request: Request, response: Response): Promise<void> 
         const messageData = JSON.parse(decodedData);
 
         // Check if the notification type is ResourceCreated
-        const notificationType = messageData?.notificationType;
-        if (notificationType !== 'ResourceCreated') {
-            logger.info('Resource created notification received. Skipping the message.');
-            response.status(200).send();
-            return;
-        }
+        // const notificationType = messageData?.notificationType;
+        // if (notificationType !== 'ResourceCreated') {
+        //     logger.info('Resource created notification received. Skipping the message.');
+        //     response.status(200).send();
+        //     return;
+        // }
 
         // Check if the resource type is ProductVariantAdded
         const eventType = messageData?.type;
@@ -65,10 +67,10 @@ export const post = async (request: Request, response: Response): Promise<void> 
 
         // Extract product type, name and image URL from product data
         const productType = productData?.productType?.id;
-        const productName = productData?.masterData?.current?.name['en-GB'];
+        const productName = productData?.masterData?.current?.name['en'];
         const imageUrl = productData?.masterData?.current?.masterVariant?.images?.[0]?.url;
         if (!productType || !productName || !imageUrl) {
-            logger.error('Missing required product data.', { productId, productType, productName, imageUrl });
+            logger.error('Missing required product data.', { productType, productName, imageUrl });
             response.status(400).send();
             return;
         }
@@ -107,18 +109,17 @@ export const post = async (request: Request, response: Response): Promise<void> 
         // Generate product description
         const generatedDescription = await generateProductDescription(imageData, productName, productTypeKey);
 
+        // Fetch selected languages for translation
+        const languagesForTranslation = await fetchselectedLanguages();
+
         // Translate description to multiple languages
-        const translations = await translateProductDescription(generatedDescription);
+        const translations = await translateProductDescription(generatedDescription, languagesForTranslation);
 
         // Create custom object to store product descriptions
-        await createProductCustomObject(productId, imageUrl, productName, productTypeKey);
+        await createProductCustomObject(productId, imageUrl, productName, productTypeKey, languagesForTranslation);
 
         // Update the custom object with the generated description
-        await updateCustomObjectWithDescription(productId, productName, imageUrl, translations as {
-            'en-US': string;
-            'en-GB': string;
-            'de-DE': string;
-        }, productTypeKey);
+        await updateCustomObjectWithDescription(productId, productName, imageUrl, translations as Record<string, string>, productTypeKey);
 
         logger.info('Processing completed successfully. ');
 

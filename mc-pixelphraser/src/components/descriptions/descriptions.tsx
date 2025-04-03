@@ -75,11 +75,11 @@ const Descriptions = () => {
 
   const filteredData = descriptionsData?.results.filter(desc =>
     (desc.value.productName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (desc.value.usDescription || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (desc.value.gbDescription || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (desc.value.deDescription || '').toLowerCase().includes(searchTerm.toLowerCase())
+    (desc.value['en-US'] || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (desc.value['en-GB'] || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (desc.value['de-DE'] || '').toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
-  
+
   const startIndex = (page - 1) * perPage;
   const endIndex = startIndex + perPage;
   const paginatedData = filteredData.slice(startIndex, endIndex);

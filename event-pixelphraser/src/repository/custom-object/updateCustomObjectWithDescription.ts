@@ -5,16 +5,13 @@ export async function updateCustomObjectWithDescription(
     productId: string,
     productName: string,
     imageUrl: string,
-    translations: {
-        "en-US": string;
-        "en-GB": string;
-        "de-DE": string;
-    },
+    translations: Record<string, string>,
     productType: string
 ) {
     try {
         logger.info(`Updating custom object for product ID: ${productId}.`);
         const apiRoot = createApiRoot();        
+
         const customObjectResponse = await apiRoot.customObjects().withContainerAndKey({
             container: "temporaryDescription",
             key: productId
@@ -28,20 +25,20 @@ export async function updateCustomObjectWithDescription(
 
         const currentVersion = currentCustomObject.version;
         
+        const updatedValue = {
+            ...translations,
+            imageUrl,
+            productType,
+            productName,
+            generatedAt: new Date().toISOString()
+        };
+
         const updateResponse = await apiRoot.customObjects().post({
             body: {
                 container: "temporaryDescription",
                 key: productId,
                 version: currentVersion, 
-                value: {
-                    usDescription: translations["en-US"],
-                    gbDescription: translations["en-GB"],
-                    deDescription: translations["de-DE"],
-                    imageUrl: imageUrl,
-                    productType: productType,
-                    productName: productName,
-                    generatedAt: new Date().toISOString()
-                }
+                value: updatedValue
             }
         }).execute();
 
