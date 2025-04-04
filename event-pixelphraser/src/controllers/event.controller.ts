@@ -75,8 +75,16 @@ export const post = async (request: Request, response: Response): Promise<void> 
 
         // Extract product type, name and image URL from product data
         const productType = productData?.productType?.id;
-        const productName = productData?.masterData?.current?.name['en'];
         const imageUrl = productData?.masterData?.current?.masterVariant?.images?.[0]?.url;
+        const nameMap = productData?.masterData?.current?.name || {};
+        const productName = nameMap['en'] || nameMap['en-US'] || Object.values(nameMap)[0];
+        logger.info(`Message ID: ${messageId} - product name: ${productName}`);
+        if (!productName) {
+            logger.error(`Message ID: ${messageId} - product name not found in any language`);
+            response.status(200).send();
+            return;
+        }
+
         if (!productType || !productName || !imageUrl) {
             logger.error(`Message ID: ${messageId} - missing data (Product Type: ${productType}, Product Name: ${productName}, Image Url: ${imageUrl})`);
             response.status(200).send();
