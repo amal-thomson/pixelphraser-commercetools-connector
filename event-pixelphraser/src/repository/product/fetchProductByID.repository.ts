@@ -2,11 +2,11 @@ import { Product } from '@commercetools/platform-sdk';
 import { createApiRoot } from '../../client/create.client';
 import { logger } from '../../utils/logger.utils';
 
-export async function fetchProduct(productId: string): Promise<Product> {
+export async function fetchProduct(productId: string, messageId: string): Promise<Product> {
     try {
         const apiRoot = createApiRoot();
 
-        logger.info(`Fetching product data for Product ID: ${productId}`);
+        logger.info(`Message ID: ${messageId} - fetching product with ID: ${productId}`);
         
         const productResponse = await apiRoot
             .products()
@@ -16,13 +16,12 @@ export async function fetchProduct(productId: string): Promise<Product> {
 
         const productData = productResponse.body ?? null;
 
-        logger.info(`Product data fetched successfully for Product ID: ${productId}`);
-        // logger.debug(`Product data: ${JSON.stringify(productData)}`);
+        logger.info(`Message ID: ${messageId} - product fetched with ID: ${productId}`);
 
         return productData;
 
     } catch (error: any) {
-        logger.error(`Failed to fetch product data for Product ID: ${productId}`, {
+        logger.error(`Message ID: ${messageId} - failed to fetch product with ID: ${productId}`, {
             message: error.message,
         });
         throw error;

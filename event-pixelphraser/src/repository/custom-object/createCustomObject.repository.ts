@@ -6,12 +6,13 @@ export async function createProductCustomObject(
     imageUrl: string, 
     productName: string, 
     productType: string, 
-    languagesForTranslation: string[]
+    languagesForTranslation: string[],
+    messageId: string
 ) {
     try {
         const apiRoot = createApiRoot();
 
-        logger.info(`Creating custom object for product ID: ${productId}`);
+        logger.info(`Message ID: ${messageId} - creating custom object with ID: ${productId}`);
 
         const descriptions = languagesForTranslation.reduce((acc, lang) => {
             acc[lang] = null; 
@@ -31,11 +32,13 @@ export async function createProductCustomObject(
             }
         }).execute();
 
-        logger.info(`Custom object created successfully for product ID: ${productId}.`);
+        logger.info(`Message ID: ${messageId} - custom object created with ID: ${productId}.`);
         return customObject;
 
     } catch (error: any) {
-        logger.error(`Failed to create custom object for product ID: ${productId}`, { message: error.message });
+        logger.error(`Message ID: ${messageId} - failed to create custom object with ID: ${productId}`, { 
+            message: error.message 
+        });
         throw error;
     }
 }

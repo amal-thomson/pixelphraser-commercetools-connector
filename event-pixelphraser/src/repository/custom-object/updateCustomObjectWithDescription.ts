@@ -6,10 +6,11 @@ export async function updateCustomObjectWithDescription(
     productName: string,
     imageUrl: string,
     translations: Record<string, string>,
-    productType: string
+    productType: string,
+    messageId: string
 ) {
     try {
-        logger.info(`Updating custom object for product ID: ${productId}.`);
+        logger.info(`Message ID: ${messageId} - updating custom object with ID: ${productId}.`);
         const apiRoot = createApiRoot();        
 
         const customObjectResponse = await apiRoot.customObjects().withContainerAndKey({
@@ -20,7 +21,7 @@ export async function updateCustomObjectWithDescription(
         const currentCustomObject = customObjectResponse?.body;
 
         if (!currentCustomObject) {
-            throw new Error(`Custom object not found for product ID: ${productId}`);
+            throw new Error(`Message ID: ${messageId} - custom object not found with ID: ${productId}`);
         }
 
         const currentVersion = currentCustomObject.version;
@@ -42,11 +43,13 @@ export async function updateCustomObjectWithDescription(
             }
         }).execute();
 
-        logger.info(`Custom object updated successfully for product ID: ${productId}.`);
+        logger.info(`Message ID: ${messageId} - custom object updated with ID: ${productId}.`);
         return updateResponse;
 
     } catch (error: any) {
-        logger.error(`Failed to update custom object for product ID: ${productId}`, { message: error.message });
+        logger.error(`Message ID: ${messageId} - failed to update custom object with ID: ${productId}`, { 
+            message: error.message 
+        });
         throw error;
     }
 }

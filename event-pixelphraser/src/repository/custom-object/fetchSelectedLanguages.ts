@@ -2,11 +2,11 @@ import { log } from 'console';
 import { createApiRoot } from '../../client/create.client';
 import { logger } from '../../utils/logger.utils';
 
-export async function fetchselectedLanguages(): Promise<string[]> {
+export async function fetchselectedLanguages(messageId: string): Promise<string[]> {
     try {
         const apiRoot = createApiRoot();
 
-        logger.info('Fetching Selected Languages for translation.');
+        logger.info(`Message ID: ${messageId} - fetching languages for translation`);
 
         const selectedLanguages = await apiRoot.customObjects().withContainerAndKey({
             container: "selectedLanguages",
@@ -19,11 +19,13 @@ export async function fetchselectedLanguages(): Promise<string[]> {
             languagesForTranslation = Object.values(languagesForTranslation).map(String);
         }
 
-        logger.info(`Selected Languages fetched successfully: ${JSON.stringify(languagesForTranslation)}`);
+        logger.info(`Message ID: ${messageId} - languages fetched: ${JSON.stringify(languagesForTranslation)}`);
         return languagesForTranslation;
 
     } catch (error: any) {
-        logger.error('Failed to fetch custom object', { message: error.message });
+        logger.error(`Message ID: ${messageId} - failed to fetch languages`, {
+            message: error.message
+        });
         throw error;
     }
 }
