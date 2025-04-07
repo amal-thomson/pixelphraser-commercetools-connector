@@ -8,9 +8,10 @@ export async function updateCustomObjectWithDescription(
     translations: Record<string, string>,
     productType: string,
     messageId: string
-) {
+) : Promise<void> {
     try {
         logger.info(`Message ID: ${messageId} - updating custom object with ID: ${productId}.`);
+        
         const apiRoot = createApiRoot();        
 
         const customObjectResponse = await apiRoot.customObjects().withContainerAndKey({
@@ -34,7 +35,7 @@ export async function updateCustomObjectWithDescription(
             generatedAt: new Date().toISOString()
         };
 
-        const updateResponse = await apiRoot.customObjects().post({
+        await apiRoot.customObjects().post({
             body: {
                 container: "temporaryDescription",
                 key: productId,
@@ -44,7 +45,7 @@ export async function updateCustomObjectWithDescription(
         }).execute();
 
         logger.info(`Message ID: ${messageId} - custom object updated with ID: ${productId}.`);
-        return updateResponse;
+        return;
 
     } catch (error: any) {
         logger.error(`Message ID: ${messageId} - failed to update custom object with ID: ${productId}`, { 

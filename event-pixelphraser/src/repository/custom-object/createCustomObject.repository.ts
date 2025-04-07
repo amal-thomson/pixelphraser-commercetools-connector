@@ -8,7 +8,7 @@ export async function createProductCustomObject(
     productType: string, 
     languagesForTranslation: string[],
     messageId: string
-) {
+) : Promise<void> {
     try {
         const apiRoot = createApiRoot();
 
@@ -19,7 +19,7 @@ export async function createProductCustomObject(
             return acc;
         }, {} as Record<string, string | null>);
 
-        const customObject = await apiRoot.customObjects().post({
+        await apiRoot.customObjects().post({
             body: {
                 container: "temporaryDescription",
                 key: productId,
@@ -33,7 +33,6 @@ export async function createProductCustomObject(
         }).execute();
 
         logger.info(`Message ID: ${messageId} - custom object created with ID: ${productId}.`);
-        return customObject;
 
     } catch (error: any) {
         logger.error(`Message ID: ${messageId} - failed to create custom object with ID: ${productId}`, { 

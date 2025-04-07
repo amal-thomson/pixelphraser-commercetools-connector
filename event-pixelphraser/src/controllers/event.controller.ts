@@ -53,16 +53,17 @@ export const post = async (request: Request, response: Response): Promise<void> 
             return;
         }
 
-        // Check if the resource type is ProductVariantAdded
+        // Check if the resource type is valid
         const eventType = messageData?.type;
         logger.info(`Message ID: ${messageId} - event received: ${eventType}`);
-        if (eventType !== 'ProductVariantAdded') {
+        const validEventTypes = ['ProductVariantAdded', 'ProductImageAdded', 'ProductCreated'];
+        if (!validEventTypes.includes(eventType)) {
             logger.error(`Message ID: ${messageId} - invalid event type: ${eventType}`);
             response.status(200).send();
             return;
         }
 
-        // Extract product details
+        // Check if the product ID is present in the message
         const productId = messageData.resource?.id;
         if (!productId) {
             logger.error(`Message ID: ${messageId} - product ID not found in message`);
@@ -79,12 +80,8 @@ export const post = async (request: Request, response: Response): Promise<void> 
         const nameMap = productData?.masterData?.current?.name || {};
         const productName = nameMap['en'] || nameMap['en-US'] || Object.values(nameMap)[0];
         logger.info(`Message ID: ${messageId} - product name: ${productName}`);
-        if (!productName) {
-            logger.error(`Message ID: ${messageId} - product name not found in any language`);
-            response.status(200).send();
-            return;
-        }
 
+        // Check if product type, name and image URL are present
         if (!productType || !productName || !imageUrl) {
             logger.error(`Message ID: ${messageId} - missing data (Product Type: ${productType}, Product Name: ${productName}, Image Url: ${imageUrl})`);
             response.status(200).send();
@@ -107,17 +104,12 @@ export const post = async (request: Request, response: Response): Promise<void> 
             return;
         }
 
-        // Fetch product type key from commercetools
-        const productTypeKey = await fetchProductType(productType, messageId);
-        if (!productTypeKey) {
-            logger.error(`Message ID: ${messageId} - failed to fetch product type`);
-            response.status(500).send();
-            return;
-        }
-
         // Sending acknowledgment to Pub/Sub
         response.status(200).send();
-        logger.info(`Message ID: ${messageId} - acknowledgment sent to Pub/Sub`); 
+        logger.info(`Message ID: ${messageId} - acknowledgment sent to Pub/Sub`);
+
+        // Fetch product type key from commercetools
+        const productTypeKey = await fetchProductType(productType, messageId);
 
         // Analyze product image
         const imageData = await productAnalysis(imageUrl, messageId);
@@ -140,8 +132,8 @@ export const post = async (request: Request, response: Response): Promise<void> 
         logger.info(`Message ID: ${messageId} - processing completed`);
 
     } catch (error) {
-        logger.error('Error processing request', { 
-            error: error instanceof Error ? error.message : error 
+        logger.error('Error processing request', {
+            error: error instanceof Error ? error.message : error
         });
         response.status(500).send();
     }
