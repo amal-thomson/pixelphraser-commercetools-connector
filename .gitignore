@@ -7,5 +7,5 @@ coverage
 .DS_Store
 .vscode
 build/
-.env
+event-pixelphraser/.env
 public/
