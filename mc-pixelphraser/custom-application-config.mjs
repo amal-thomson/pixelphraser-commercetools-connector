@@ -19,7 +19,7 @@ const config = {
   },
   icon: '${path:@commercetools-frontend/assets/application-icons/screen.svg}',
   mainMenuLink: {
-    defaultLabel: 'PixelPhraser',
+    defaultLabel: 'Pixel Phraser',
     labelAllLocales: [],
     permissions: [PERMISSIONS.View],
   },
