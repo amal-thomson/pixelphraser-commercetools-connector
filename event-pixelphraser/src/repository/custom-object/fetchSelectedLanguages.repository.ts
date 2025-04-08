@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { createApiRoot } from '../../client/create.client';
 import { logger } from '../../utils/logger.utils';
 

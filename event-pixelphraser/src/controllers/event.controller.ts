@@ -4,11 +4,11 @@ import { productAnalysis } from '../services/vision-ai/productAnalysis.service';
 import { generateProductDescription } from '../services/generative-ai/descriptionGeneration.service';
 import { ProductAttribute } from '../interfaces/productAttribute.interface';
 import { createProductCustomObject } from '../repository/custom-object/createCustomObject.repository';
-import { updateCustomObjectWithDescription } from '../repository/custom-object/updateCustomObjectWithDescription';
+import { updateCustomObjectWithDescription } from '../repository/custom-object/updateCustomObjectWithDescription.repository';
 import { fetchProductType } from '../repository/product-type/fetchProductTypeById.repository';
 import { translateProductDescription } from '../services/generative-ai/translateProductDescription.service';
 import { fetchProduct } from '../repository/product/fetchProductByID.repository';
-import { fetchselectedLanguages } from '../repository/custom-object/fetchSelectedLanguages';
+import { fetchselectedLanguages } from '../repository/custom-object/fetchSelectedLanguages.repository';
 
 export const post = async (request: Request, response: Response): Promise<void> => {
     try {
