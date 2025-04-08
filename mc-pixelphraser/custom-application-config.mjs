@@ -6,7 +6,7 @@ const config = {
   cloudIdentifier: '${env:CLOUD_IDENTIFIER}',
   env: {
     development: {
-      initialProjectKey: "${env:PROJECT_ID}"
+      initialProjectKey: "pixel-phraser-demo"
     },
     production: {
       applicationId: '${env:CUSTOM_APPLICATION_ID}',
