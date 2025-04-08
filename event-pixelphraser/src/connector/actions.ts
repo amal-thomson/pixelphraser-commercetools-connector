@@ -1,6 +1,5 @@
 import { Destination, GoogleCloudPubSubDestination } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
-// import { logger } from '../utils/logger.utils';
 
 const PRODUCT_SUBSCRIPTION_KEY = 'productCreatedSubscription';
 
@@ -25,7 +24,6 @@ async function createSubscription(
         .map((type) => type.trim())
         .filter((type) => type)
     : ['ProductCreated'];
-  // logger.info(`Event Triggers: ${JSON.stringify(eventTrigger)}`);
 
   await deleteProductSubscription(apiRoot);
   await apiRoot

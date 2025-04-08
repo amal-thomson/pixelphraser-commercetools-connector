@@ -1,11 +1,11 @@
 import { createApiRoot } from '../../client/create.client';
 import { logger } from '../../utils/logger.utils';
 
-export async function fetchProductType(productType: string): Promise<string | null> {
+export async function fetchProductType(productType: string, messageId: string): Promise<string> {
     try {
         const apiRoot = createApiRoot();
 
-        logger.info('Fetching product type key for product type ID: ' + productType);
+        logger.info(`Message ID: ${messageId} - fetching product type with ID: ${productType}`);
 
         const productTypeResponse = await apiRoot
             .productTypes()
@@ -13,16 +13,16 @@ export async function fetchProductType(productType: string): Promise<string | nu
             .get()
             .execute();
 
-        const productTypeKey = productTypeResponse.body.key ?? null;
+        const productTypeKey = productTypeResponse.body.key ?? '';
 
-        logger.info(`Product type fetched successfully, Product Type Key: ${productTypeKey}`);
+        logger.info(`Message ID: ${messageId} - product type fetched, Product Type: ${productTypeKey}`);
 
         return productTypeKey;
         
     } catch (error: any) {
-        logger.error(`Failed to fetch product type for Product ID: ${productType}`, {
+        logger.error(`Message ID: ${messageId} - failed to fetch product type with ID: ${productType}`, {
             message: error.message,
         });
-        return null;
+        throw error;
     }
 }

@@ -2,9 +2,9 @@ import { ImageData } from '../../interfaces/imageData.interface';
 import { logger } from '../../utils/logger.utils';
 import { model } from '../../config/ai.config';
 
-export async function generateProductDescription(imageData: ImageData, productName: string, productTypeKey: string): Promise<string> {
+export async function generateProductDescription(imageData: ImageData, productName: string, productTypeKey: string, messageId: string): Promise<string> {
     try {
-        logger.info('Sending product data and prompt to Generative AI for generating descriptions.');
+        logger.info(`Message ID: ${messageId} - sending prompt to Generative AI for description generation`);
 
         const prompt = `Generate a persuasive, SEO-optimized product description (under 150 words) for a product type : "${productTypeKey}", based on the following data:
 
@@ -35,11 +35,13 @@ export async function generateProductDescription(imageData: ImageData, productNa
         if (!result?.response) throw new Error('Generative AI response is null or undefined.');
 
         const generatedDescription = result.response.text();
-        logger.info('Description generated successfully.');
+        logger.info(`Message ID: ${messageId} - description generated`);
         return generatedDescription;
 
     } catch (error: any) {
-        logger.error('Error during generating escription:', { message: error.message, stack: error.stack });
+        logger.error(`Message ID: ${messageId} - error during generating description`, { 
+            message: error.message, stack: error.stack 
+        });
         throw error;
     }
 }

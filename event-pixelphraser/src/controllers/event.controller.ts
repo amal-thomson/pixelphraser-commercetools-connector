@@ -8,17 +8,18 @@ import { updateCustomObjectWithDescription } from '../repository/custom-object/u
 import { fetchProductType } from '../repository/product-type/fetchProductTypeById.repository';
 import { translateProductDescription } from '../services/generative-ai/translateProductDescription.service';
 import { fetchProduct } from '../repository/product/fetchProductByID.repository';
+import { fetchselectedLanguages } from '../repository/custom-object/fetchSelectedLanguages';
 
 export const post = async (request: Request, response: Response): Promise<void> => {
     try {
         // Extract and validate Pub/Sub message
         const pubSubMessage = request.body?.message;
         if (!pubSubMessage) {
-            logger.error('Missing Pub/Sub message.');
-            response.status(400).send();
+            logger.error('Missing Pub/Sub message');
+            response.status(200).send();
             return;
         }
-        logger.info('Message Received:', pubSubMessage);
+        // logger.info('Message Received:', pubSubMessage);
 
         // Decode Pub/Sub message data
         const decodedData = pubSubMessage.data
@@ -26,104 +27,114 @@ export const post = async (request: Request, response: Response): Promise<void> 
             : undefined;
 
         if (!decodedData) {
-            logger.error('No data found in Pub/Sub message.');
-            response.status(400).send();
+            logger.error('No data found in Pub/Sub message');
+            response.status(200).send();
             return;
         }
-        logger.info('Decoded Data:', decodedData);
+        // logger.info(`Decoded Data: ${decodedData}`);
 
         // Parse the decoded data
         const messageData = JSON.parse(decodedData);
 
-        // Check if the notification type is ResourceCreated
+        // Get message ID & notification type
+        const messageId = messageData?.id;
         const notificationType = messageData?.notificationType;
-        if (notificationType !== 'ResourceCreated') {
-            logger.info('Resource created notification received. Skipping the message.');
+
+        // Check if the notification type is ResourceCreated or Message
+        if (notificationType === 'Message') {
+            logger.info(`Message ID: ${messageId} - message received is ${notificationType}. processing message`);
+        } else if (notificationType === 'ResourceCreated') {
+            logger.info(`Message ID: ${messageId} - message received is ${notificationType}. skipping message`);
+            response.status(200).send();
+            return;
+        } else {
+            logger.info(`Message ID: ${messageId} - message received is ${notificationType}. skipping message`);
             response.status(200).send();
             return;
         }
 
-        // Check if the resource type is ProductVariantAdded
+        // Check if the resource type is valid
         const eventType = messageData?.type;
-        logger.info(`Event received: ${eventType}`);
-        if (eventType !== 'ProductVariantAdded') {
-            logger.error(`Invalid event type: ${eventType}`);
-            response.status(400).send();
+        logger.info(`Message ID: ${messageId} - event received: ${eventType}`);
+        const validEventTypes = ['ProductVariantAdded', 'ProductImageAdded', 'ProductCreated'];
+        if (!validEventTypes.includes(eventType)) {
+            logger.error(`Message ID: ${messageId} - invalid event type: ${eventType}`);
+            response.status(200).send();
             return;
         }
 
-        // Extract product details
+        // Check if the product ID is present in the message
         const productId = messageData.resource?.id;
         if (!productId) {
-            logger.error('Product ID not found in the message.');
-            response.status(400).send();
+            logger.error(`Message ID: ${messageId} - product ID not found in message`);
+            response.status(200).send();
             return;
         }
 
         // Fetch product data from commercetools
-        const productData = await fetchProduct(productId);
+        const productData = await fetchProduct(productId, messageId);
 
         // Extract product type, name and image URL from product data
         const productType = productData?.productType?.id;
-        const productName = productData?.masterData?.current?.name['en-GB'];
         const imageUrl = productData?.masterData?.current?.masterVariant?.images?.[0]?.url;
+        const nameMap = productData?.masterData?.current?.name || {};
+        const productName = nameMap['en'] || nameMap['en-US'] || Object.values(nameMap)[0];
+        logger.info(`Message ID: ${messageId} - product name: ${productName}`);
+
+        // Check if product type, name and image URL are present
         if (!productType || !productName || !imageUrl) {
-            logger.error('Missing required product data.', { productId, productType, productName, imageUrl });
-            response.status(400).send();
+            logger.error(`Message ID: ${messageId} - missing data (Product Type: ${productType}, Product Name: ${productName}, Image Url: ${imageUrl})`);
+            response.status(200).send();
             return;
         }
 
         // Extract and validate product attributes
         const attributes: ProductAttribute[] = productData?.masterData?.staged?.masterVariant?.attributes || [];
         if (!attributes.length) {
-            logger.error('No product attributes found.', { productId });
-            response.status(400).send();
+            logger.error(`Message ID: ${messageId} - no product attributes found`);
+            response.status(200).send();
             return;
         }
 
         // Check if automatic description generation is enabled
         const genDescriptionAttr = attributes.find(attr => attr.name === 'generateDescription');
         if (!genDescriptionAttr || !Boolean(genDescriptionAttr?.value)) {
-            logger.info('Automatic description generation not enabled.', { productId });
+            logger.info(`Message ID: ${messageId} - automatic description generation not enabled`);
             response.status(200).send();
-            return;
-        }
-
-        // Fetch product type key from commercetools
-        const productTypeKey = await fetchProductType(productType);
-        if (!productTypeKey) {
-            logger.error('Failed to fetch product type key.', { productId });
-            response.status(500).send();
             return;
         }
 
         // Sending acknowledgment to Pub/Sub
         response.status(200).send();
-        logger.info('Acknowledgment sent to Pub/Sub.'); 
+        logger.info(`Message ID: ${messageId} - acknowledgment sent to Pub/Sub`);
+
+        // Fetch product type key from commercetools
+        const productTypeKey = await fetchProductType(productType, messageId);
 
         // Analyze product image
-        const imageData = await productAnalysis(imageUrl);
+        const imageData = await productAnalysis(imageUrl, messageId);
 
         // Generate product description
-        const generatedDescription = await generateProductDescription(imageData, productName, productTypeKey);
+        const generatedDescription = await generateProductDescription(imageData, productName, productTypeKey, messageId);
+
+        // Fetch selected languages for translation
+        const languagesForTranslation = await fetchselectedLanguages(messageId);
 
         // Translate description to multiple languages
-        const translations = await translateProductDescription(generatedDescription);
+        const translations = await translateProductDescription(generatedDescription, languagesForTranslation, messageId);
 
         // Create custom object to store product descriptions
-        await createProductCustomObject(productId, imageUrl, productName, productTypeKey);
+        await createProductCustomObject(productId, imageUrl, productName, productTypeKey, languagesForTranslation, messageId);
 
         // Update the custom object with the generated description
-        await updateCustomObjectWithDescription(productId, productName, imageUrl, translations as {
-            'en-US': string;
-            'en-GB': string;
-            'de-DE': string;
-        }, productTypeKey);
+        await updateCustomObjectWithDescription(productId, productName, imageUrl, translations as Record<string, string>, productTypeKey, messageId);
 
-        logger.info('Processing completed successfully. ');
+        logger.info(`Message ID: ${messageId} - processing completed`);
 
     } catch (error) {
-        logger.error('Error processing request', { error: error instanceof Error ? error.message : error });
+        logger.error('Error processing request', {
+            error: error instanceof Error ? error.message : error
+        });
         response.status(500).send();
     }
 };

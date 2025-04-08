@@ -1,16 +1,16 @@
-import { PERMISSIONS, entryPointUriPath } from './src/constants';
+import { PERMISSIONS } from './src/constants';
 
 const config = {
   name: 'PixelPhraser',
-  entryPointUriPath,
-  cloudIdentifier: 'gcp-eu',
+  entryPointUriPath: '${env:ENTRY_POINT_URI_PATH}',
+  cloudIdentifier: '${env:CLOUD_IDENTIFIER}',
   env: {
     development: {
       initialProjectKey: "${env:PROJECT_ID}"
     },
     production: {
-      applicationId: "${env:APPLICATION_ID}",
-      url: "https://pixelphraser.vercel.app",
+      applicationId: '${env:CUSTOM_APPLICATION_ID}',
+      url: '${env:APPLICATION_URL}',
     },
   },
   oAuthScopes: {
@@ -19,7 +19,7 @@ const config = {
   },
   icon: '${path:@commercetools-frontend/assets/application-icons/screen.svg}',
   mainMenuLink: {
-    defaultLabel: 'PixelPhraser',
+    defaultLabel: 'Pixel Phraser',
     labelAllLocales: [],
     permissions: [PERMISSIONS.View],
   },
