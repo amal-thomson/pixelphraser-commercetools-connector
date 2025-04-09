@@ -1,4 +1,4 @@
-import { PERMISSIONS } from './src/constants';
+import { PERMISSIONS } from './src/constants.ts'
 /**
  * @type {import('@commercetools-frontend/application-config').ConfigOptionsForCustomApplication}
  */
