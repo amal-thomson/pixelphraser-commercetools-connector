@@ -1,5 +1,7 @@
 import { PERMISSIONS } from './src/constants';
-
+/**
+ * @type {import('@commercetools-frontend/application-config').ConfigOptionsForCustomApplication}
+ */
 const config = {
   name: 'PixelPhraser',
   entryPointUriPath: '${env:ENTRY_POINT_URI_PATH}',

@@ -1,4 +1,3 @@
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { entryPointUriPathToPermissionKeys } from '@commercetools-frontend/application-shell/ssr';
  
 export const entryPointUriPath =
