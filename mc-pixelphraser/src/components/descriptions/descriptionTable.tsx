@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { SecondaryButton, PrimaryButton } from '@commercetools-uikit/buttons';
+import PrimaryButton from '@commercetools-uikit/primary-button';
+import SecondaryButton from '@commercetools-uikit/secondary-button';
 import DataTable from '@commercetools-uikit/data-table';
 import Text from '@commercetools-uikit/text';
 import Spacings from '@commercetools-uikit/spacings';

@@ -3,7 +3,9 @@ import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
 import Text from '@commercetools-uikit/text';
 import Constraints from '@commercetools-uikit/constraints';
-import { PrimaryButton, SecondaryButton } from '@commercetools-uikit/buttons';
+import PrimaryButton from '@commercetools-uikit/primary-button';
+import SecondaryButton from '@commercetools-uikit/secondary-button';
+
 import { CheckBoldIcon, CloseBoldIcon, CloseIcon, HomeIcon, InfoIcon, ReviewIcon, WorldIcon } from '@commercetools-uikit/icons';
 import Tooltip from '@commercetools-uikit/tooltip';
 import { useAsyncDispatch } from '@commercetools-frontend/sdk';

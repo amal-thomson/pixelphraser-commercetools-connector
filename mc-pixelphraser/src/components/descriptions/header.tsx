@@ -1,4 +1,4 @@
-import { SecondaryButton } from '@commercetools-uikit/buttons';
+import SecondaryButton from '@commercetools-uikit/secondary-button';
 import { GearIcon, RefreshIcon } from '@commercetools-uikit/icons';
 import Text from '@commercetools-uikit/text';
 import Link from '@commercetools-uikit/link';
