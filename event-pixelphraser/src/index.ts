@@ -6,7 +6,7 @@ dotenv.config();
 const PORT = 8080;
 
 const server = app.listen(PORT, () => {
-  logger.info(`Connector listening for event.`);
+  logger.info(`Connector listening for event...`);
 });
 
 export default server;

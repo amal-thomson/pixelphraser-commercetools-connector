@@ -10,4 +10,4 @@
   </a><br>
 </p>
 
-The Custom Application for the PixelPhraser CT Connector enhances the product description review process by allowing users to efficiently accept or reject AI-generated content. 
+The Custom Application for the PixelPhraser CT Connector enhances the product description review process by allowing users to efficiently accept or reject AI-generated content. It also enables customers to configure the languages in which the descriptions are generated.

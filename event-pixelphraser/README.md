@@ -10,4 +10,4 @@
   </a><br>
 </p>
 
-The PixelPhraser Connector automates the creation of engaging product descriptions for new items in CommerceTools by leveraging Google Cloud Vision AI. This innovative tool analyzes product images to generate relevant and compelling descriptions that resonate with customers. By utilizing advanced Generative AI, the connector ensures that the content is not only informative but also persuasive, enhancing customer engagement.
+The PixelPhraser Connector automates the creation of engaging product descriptions for new items in CommerceTools by leveraging Google Cloud Vision AI. This connector analyzes product images to generate relevant and compelling descriptions that resonate with customers. By utilizing advanced Generative AI, the connector ensures that the content is not only informative but also persuasive, enhancing customer engagement. In addition to generating descriptions, the connector also translates the generated content into the configured languages.

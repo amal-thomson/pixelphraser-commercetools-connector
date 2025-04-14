@@ -10,5 +10,8 @@
   </a><br>
 </p>
 
-The PixelPhraser CT Connector is an innovative tool that automates the creation of engaging product descriptions for new products in CommerceTools. Utilizing CommerceTools' event architecture, it leverages Google Cloud Vision AI to analyze product images, ensuring that the generated descriptions are relevant to the visual content. Integrated with Google's Generative AI, the connector produces high-quality descriptions based on the data derived from image analysis. Additionally, a Custom Application enhances the review process, allowing customers to efficiently accept or reject descriptions with advanced search capabilities, streamlining product management and boosting customer engagement.
+The PixelPhraser - Commercetools Connector automates product description creation, leveraging Google Cloud Vision AI and Generative AI to analyze product images and generate detailed, engaging descriptions. This solution interprets images to identify objects, colors, and sentiments, transforming this data into informative and SEO-friendly descriptions. A custom application within the Commercetools platform allows customers to review and approve or reject these AI-generated descriptions, ensuring quality and consistency. This streamlines the description creation process, enhancing efficiency and improving the accuracy and engagement of product content, ultimately driving sales and boosting customer satisfaction.
+
+Additionally, the connector supports translation of product descriptions into multiple locales. These translations can be easily configured and managed directly from the Commercetools Merchant Center, allowing businesses to effortlessly scale content across regions and languages.
+
 

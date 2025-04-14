@@ -18,7 +18,7 @@ import { Pagination } from '@commercetools-uikit/pagination';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import { useIntl } from 'react-intl';
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 const Descriptions = () => {
   const dispatch = useAsyncDispatch();
@@ -64,7 +64,7 @@ const Descriptions = () => {
       const response = await fetchSelectedLanguages(dispatch);
       console.log('Selected Languages:', response?.value);
       if (response?.value && Array.isArray(response.value)) {
-        setSelectedLanguages(response.value); // Store selected languages in state
+        setSelectedLanguages(response.value);
       } else {
         console.warn('Unexpected data format for selected languages:', response?.value);
       }
@@ -90,13 +90,6 @@ const Descriptions = () => {
     });
   };
 
-  // const filteredData = descriptionsData?.results.filter(desc =>
-  //   (desc.value.productName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   (desc.value['en-US'] || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   (desc.value['en-GB'] || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   (desc.value['de-DE'] || '').toLowerCase().includes(searchTerm.toLowerCase())
-  // ) || [];
-
   const filteredData = descriptionsData?.results.filter((desc) =>
     (desc.value.productName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
     selectedLanguages.some((lang) =>
@@ -104,7 +97,6 @@ const Descriptions = () => {
     )
   ) || [];
   
-
   const startIndex = (page - 1) * perPage;
   const endIndex = startIndex + perPage;
   const paginatedData = filteredData.slice(startIndex, endIndex);

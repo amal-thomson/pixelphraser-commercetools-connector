@@ -10,6 +10,7 @@ import { useAsyncDispatch } from '@commercetools-frontend/sdk';
 import { DescriptionsTableProps } from '../../interfaces/descriptionsTableProps';
 import { DescriptionModal } from './descriptionModal';
 import { fetchSelectedLanguages } from '../../hooks/fetchSelectedLanguages';
+import { updateProductDescription } from '../../hooks/updateProductDescription';
 
 export const DescriptionsTable = ({
   data,
@@ -44,7 +45,7 @@ export const DescriptionsTable = ({
         return acc;
       }, {} as Record<string, string>);
 
-      // await updateProductDescription(dispatch, tempDesc.key, updatedValues);
+      await updateProductDescription(dispatch, tempDesc.key, updatedValues);
       await deleteTemporaryDescription(dispatch, tempDesc.id, tempDesc.version);
       await loadDescriptions();
       showSuccessMessage('Description accepted and updated successfully');

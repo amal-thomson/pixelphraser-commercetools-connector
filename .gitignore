@@ -8,3 +8,5 @@ coverage
 .vscode
 build/
 public/
+
+event-pixelphraser/.env
