@@ -176,11 +176,11 @@ To uninstall the PixelPhraser Connector from your CommerceTools project:
 ## <a id="demonstration"></a> 10. Demonstration
 Explore the visual and video materials that showcase how the **PixelPhraser – CommerceTools Connector** works in action.
 
-#### Image Demonstrations
+- Image Demonstrations
 Browse the collection of sample images in [`demonstration_images`](./demonstration_images) directory.
 
-#### Video Demonstration
-Watch the full walkthrough located in the [`video`](./demonstration_gif) directory. 
+- Video Demonstration
+Watch the full walkthrough located in the [`demonstration_gif`](./demonstration_gif) directory. 
 
 ---
 
