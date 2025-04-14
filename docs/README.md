@@ -1,6 +1,7 @@
 # PixelPhraser - CommerceTools Connector 
-The PixelPhraser - CommerceTools Connector automates product description creation using Google Cloud Vision AI and Generative AI, which interpret product images to create detailed, relevant descriptions. It also features a Custom Application for review, allowing efficient management of these AI-generated descriptions within the CommerceTools platform.
+The PixelPhraser – CommerceTools Connector automates the creation of product descriptions by leveraging Google Cloud Vision AI and Generative AI. These technologies analyze product images to generate detailed, relevant, and engaging descriptions. The connector includes a Custom Application within the CommerceTools platform, enabling users to efficiently review and manage these AI-generated descriptions.
 
+Additionally, the generated descriptions are automatically translated into multiple languages. The target languages can be configured directly within the Merchant Center Custom Application, allowing for seamless localization and a tailored experience for global markets.
 <p align="center">
   <a href="https://commercetools.com/">
     <img alt="commercetools logo" src="https://unpkg.com/@commercetools-frontend/assets/logos/commercetools_primary-logo_horizontal_RGB.png">
@@ -23,11 +24,16 @@ The PixelPhraser - CommerceTools Connector automates product description creatio
 7. [Running the Application Locally](#running-the-application-locally)
 8. [Uninstalling the Connector](#uninstalling-the-connector)
 9. [References](#references)
+10. [Demonstration](#demonstration)
 
 ---
 
 ## <a id="introduction"></a> 1. Introduction
-The PixelPhraser - CommerceTools Connector automates product description creation, leveraging Google Cloud Vision AI and Generative AI to analyze product images and generate detailed, engaging descriptions. This solution interprets images to identify objects, colors, and sentiments, transforming this data into informative and SEO-friendly descriptions. A custom application within the CommerceTools platform allows customers to review and approve or reject these AI-generated descriptions, ensuring quality and consistency. This streamlines the description creation process, enhancing efficiency and improving the accuracy and engagement of product content, ultimately driving sales and boosting customer satisfaction.
+The PixelPhraser – CommerceTools Connector automates product description creation, leveraging Google Cloud Vision AI and Generative AI to analyze product images and generate detailed, engaging, and SEO-friendly descriptions. This solution intelligently interprets product images by identifying objects, colors, and sentiments, transforming this data into informative content that resonates with customers and improves search visibility.
+
+A Custom Application within the CommerceTools platform empowers users to review, approve, or reject these AI-generated descriptions, ensuring brand consistency and high content quality. This streamlined process significantly enhances operational efficiency while improving the accuracy and appeal of product information.
+
+Additionally, the generated descriptions are automatically translated into multiple languages, with the target languages configurable within the Merchant Center Custom Application. This enables effortless localization, helping merchants deliver a personalized shopping experience across global markets—ultimately driving sales and increasing customer satisfaction.
 
 ## <a id="features"></a> 2. Features
 - **Automated Event-Driven Processing**
@@ -48,15 +54,16 @@ This connector is designed to automate the generation of product descriptions ba
    - It captures various attributes such as labels, colors, text, objects, and web entities from the images.
 4. **Generating Descriptions:**
    - High-quality, detailed descriptions are generated based on the analyzed image data using Google Generative AI.
-5. **Updating Custom Objects:**
+5. **Translate Descriptions:**
+   - These generated descriptions are then translated into the configured languages.
+6. **Updating Custom Objects:**
    - The generated descriptions are stored temporarily in CommerceTools Custom Objects for customer review.
-6. **User  Interface for Review:**
-   - Customers can search for descriptions, view associated images, and accept or reject the generated descriptions through a user-friendly interface.
+7. **User  Interface for Review and Configuration:**
+   - Customers can search for descriptions, view associated images, and accept or reject the generated content through a user-friendly interface. Additionally, this Custom Application allows customers to seamlessly configure the languages into which the descriptions are translated.
 
 ## <a id="application-workflow"></a> 4. Application Workflow
 ### Workflow Overview
 ![Workflow Diagram](https://pixelphraser-ct-connector.s3.us-east-1.amazonaws.com/pixelphraser-flowdiagram.jpeg)
-![Activity Diagram](https://pixelphraser-ct-connector.s3.us-east-1.amazonaws.com/pixelphraser-activitydiagram.jpeg)
 
 ## <a id="key-components"></a> 5. Key Components
 ### Event Listener
@@ -65,15 +72,15 @@ This connector is designed to automate the generation of product descriptions ba
 - **Module:** `productAnalysis`
 - **Functionality:** Analyzes product image URLs, extracting key visual elements such as labels, objects, colors, text, and web entities.
 - **Outputs:** Structured image data providing foundational information for description generation. 
-### Description Generation with Generative AI
-- **Module:** `generateProductDescription`
-- **Functionality:** Generates product descriptions based on the structured image data. Ensures descriptions are relevant and engaging for e-commerce use.
-- **Outputs:** Fully generated product description ready for integration in CommerceTools.
+### Description Generation and Translation with Generative AI
+- **Module:** `generateProductDescription`, `translateProductDescription`
+- **Functionality:** Generates product descriptions based on the structured image data. Ensures descriptions are relevant and engaging for e-commerce use, then translate the descriptions into the configured languages.
+- **Outputs:** Fully generated multilingual product description ready for integration in CommerceTools.
 ### Temporary Storage in CommerceTools
 - **Creation:** Initializes a custom object with placeholder metadata and description data.
 - **Update:** Finalizes the object by adding generated description and relevant metadata, preparing it for customer review.
-### User  Interface for Review
-- **Functionality:** Allows customers to review and approve or reject these AI-generated descriptions.
+### User  Interface for Review and Configuration
+- **Functionality:** Allows customers to review and approve or reject these AI-generated descriptions. Additionally, this Custom Application allows customers to seamlessly configure the languages into which the descriptions are translated.
 
 ## <a id="prerequisites-and-setup"></a> 6. Prerequisites and Setup
 ### 6.1 CommerceTools Account and API Keys
@@ -95,19 +102,30 @@ This connector is designed to automate the generation of product descriptions ba
 
 ### 6.3 Environment Configuration
 Configure your `.env` file with the following details:
+#### Event Application
 ```plaintext
 # CommerceTools Credentials
-CTP_PROJECT_KEY=your_project_key
-CTP_CLIENT_SECRET=your_client_secret
-CTP_CLIENT_ID=your_client_id
-CTP_AUTH_URL=https://auth.commercetools.com/oauth/token
-CTP_API_URL=https://api.commercetools.com
-CTP_SCOPE=manage_project
-CTP_REGION=us-central1
+CTP_PROJECT_KEY=[Commercetools Composable Commerce project key]
+CTP_CLIENT_SECRET=[Commercetools Composable Commerce client secret]
+CTP_CLIENT_ID=[Commercetools Composable Commerce client ID]
+CTP_AUTH_URL=[https://auth.commercetools.com/oauth/token]
+CTP_API_URL=[https://api.commercetools.com]
+CTP_SCOPE=[manage_project:CTP_PROJECT_KEY]
+CTP_REGION=[Commercetools Composable Commerce API region]
 # Google Cloud Platform Credentials
-BASE64_ENCODED_GCP_SERVICE_ACCOUNT=your_base64_encoded_service_account
-GEMINI_MODEL=your_gemini_model
-GENERATIVE_AI_API_KEY=your_api_key
+BASE64_ENCODED_GCP_SERVICE_ACCOUNT=[GCP Service Account in Base64 encoded format]
+GEMINI_MODEL=[GEMINI_MODEL, example; [gemini-1.5-flash, gemini-2.0-pro]]
+GENERATIVE_AI_API_KEY=[GENERATIVE AI API KEY to access Gemini]
+#Commercetools Event Trigger 
+CTP_EVENT_TRIGGER_NAME=[Set the event trigger name. If there are multiple, separate them with commas. Supported triggers; [ProductVariantAdded, ProductImageAdded, ProductPublished]]
+```
+#### Merchant Center Custom Application
+```plaintext
+CUSTOM_APPLICATION_ID=[The Custom Application ID from the Merchant Center] 
+CLOUD_IDENTIFIER=[The Cloud Identifier for the application ]
+ENTRY_POINT_URI_PATH=[The Application entry point URI path ] 
+ENABLE_NEW_JSX_TRANSFORM=["true"] 
+FAST_REFRESH=["true" ]
 ```
 
 ## <a id="running-the-application-locally"></a> 7. Running the Application Locally
@@ -145,6 +163,9 @@ To uninstall the PixelPhraser Connector from your CommerceTools project:
 ## <a id="references"></a> 9. References
 - [CommerceTools Documentation](https://docs.commercetools.com/)
 - [Google Cloud Documentation](https://cloud.google.com/docs)
+
+## <a id="demonstration"></a> 10. Demonstration
+[Check out the `demonstration` directory](./docs/)
 
 ---
 
