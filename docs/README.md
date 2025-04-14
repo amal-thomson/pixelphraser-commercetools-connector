@@ -174,7 +174,13 @@ To uninstall the PixelPhraser Connector from your CommerceTools project:
 - [Google Cloud Documentation](https://cloud.google.com/docs)
 
 ## <a id="demonstration"></a> 10. Demonstration
-[Check out the `demonstration` directory](./demonstration_images)
+Explore the visual and video materials that showcase how the **PixelPhraser – CommerceTools Connector** works in action.
+
+#### Image Demonstrations
+Browse the collection of sample images in [`demonstration_images`](./demonstration_images) directory.
+
+#### Video Demonstration
+Watch the full walkthrough located in the [`video`](./demonstration_gif) directory. 
 
 ---
 
