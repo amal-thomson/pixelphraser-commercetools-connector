@@ -44,20 +44,27 @@ Additionally, the generated descriptions are automatically translated into multi
 
 ## <a id="functional-overview"></a> 3. Functional Overview
 This connector is designed to automate the generation of product descriptions based on product creation events. Below is a step-by-step breakdown of its functionality:
+
 1. **Receiving Event Triggers:**
    - The connector listens for product creation events to initiate the description generation process.
+
 2. **Checking Attribute:**
    - It checks if the `generateDescription` attribute is set to `true`. 
    - If `true`, the connector proceeds with the description generation; if `false`, the process is skipped.
+
 3. **Analyzing Product Images:**
    - The connector interprets product images using Vision AI.
    - It captures various attributes such as labels, colors, text, objects, and web entities from the images.
+
 4. **Generating Descriptions:**
    - High-quality, detailed descriptions are generated based on the analyzed image data using Google Generative AI.
+
 5. **Translate Descriptions:**
    - These generated descriptions are then translated into the configured languages.
+
 6. **Updating Custom Objects:**
    - The generated descriptions are stored temporarily in CommerceTools Custom Objects for customer review.
+
 7. **User  Interface for Review and Configuration:**
    - Customers can search for descriptions, view associated images, and accept or reject the generated content through a user-friendly interface. Additionally, this Custom Application allows customers to seamlessly configure the languages into which the descriptions are translated.
 
@@ -112,10 +119,12 @@ CTP_AUTH_URL=[https://auth.commercetools.com/oauth/token]
 CTP_API_URL=[https://api.commercetools.com]
 CTP_SCOPE=[manage_project:CTP_PROJECT_KEY]
 CTP_REGION=[Commercetools Composable Commerce API region]
+
 # Google Cloud Platform Credentials
 BASE64_ENCODED_GCP_SERVICE_ACCOUNT=[GCP Service Account in Base64 encoded format]
 GEMINI_MODEL=[GEMINI_MODEL, example; [gemini-1.5-flash, gemini-2.0-pro]]
 GENERATIVE_AI_API_KEY=[GENERATIVE AI API KEY to access Gemini]
+
 #Commercetools Event Trigger 
 CTP_EVENT_TRIGGER_NAME=[Set the event trigger name. If there are multiple, separate them with commas. Supported triggers; [ProductVariantAdded, ProductImageAdded, ProductPublished]]
 ```
@@ -165,7 +174,7 @@ To uninstall the PixelPhraser Connector from your CommerceTools project:
 - [Google Cloud Documentation](https://cloud.google.com/docs)
 
 ## <a id="demonstration"></a> 10. Demonstration
-[Check out the `demonstration` directory](./docs/)
+[Check out the `demonstration` directory](./docs/demonstration_images)
 
 ---
 
